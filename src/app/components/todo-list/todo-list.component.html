@@ -1,0 +1,21 @@
+<div class="shadow-md mt-10 p-2">
+  <div class="flex items-baseline gap-4">
+    <span class="text-3xl font-bold">Your tasks:</span>
+
+    <span class="text-xl text-gray-500 font-medium">
+      {{ activeCount() }} / {{ totalCount() }} active
+    </span>
+  </div>
+
+  <app-filter-bar></app-filter-bar>
+
+  <div>
+    <ul>
+      @for (task of filteredTasks$ | async; track $index) {
+        <app-todo-item [task]="task" (delete)="onDelete($event)" (update)="onUpdate($event)"></app-todo-item>
+      } @empty {
+        <p class="mt-5 text-gray-600 italic">No task yet. Add one above!</p>
+      }
+    </ul>
+  </div>
+</div>

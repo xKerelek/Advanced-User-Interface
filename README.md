@@ -1,59 +1,48 @@
-# TodoList
+# To-Do App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+## 🚀 Główne funkcjonalności
 
-## Development server
+* **Pełny CRUD:** Dodawanie, odczyt, edycja **inline-editing** oraz usuwanie zadań, zsynchronizowane z lokalną bazą danych za pomocą zapytań HTTP.
+* **Nowoczesne zarządzanie stanem (Signals):** Wykorzystanie `toSignal` oraz `computed` do błyskawicznego, reaktywnego przeliczania wyświetlanej listy i liczników zadań.
+* **Czysty Control Flow:** Zastosowanie natywnej składni `@if`, `@else` i `@for` w widokach, co zapewnia przejrzystą, imperatywną strukturę logiczną znaną z języków takich jak C czy C++.
+* **Dynamiczne filtrowanie:** Przełączanie między widokami zadań (All / Active / Completed).
+* **Czysta architektura:** Rozdzielenie logiki biznesowej (Serwisy), modeli danych (Interfejsy) oraz warstwy prezentacji (Komponenty).
+* **UI/UX:** W pełni ostylowany, responsywny interfejs przy użyciu Tailwind CSS.
 
-To start a local development server, run:
+## 🛠️ Technologie
 
-```bash
-ng serve
-```
+* Angular 19 
+* TypeScript
+* Tailwind CSS
+* json-server
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## ⚙️ Uruchomienie projektu
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Krok 1: Instalacja zależności
+Otwórz terminal w głównym folderze projektu i zainstaluj wymagane pakiety:
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Krok 2: Uruchomienie bazy danych 
+Aplikacja korzysta z json-server jako lokalnej bazy danych (plik db.json). Uruchom go w terminalu na porcie 3000:
 
 ```bash
-ng test
+npx json-server db.json 
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Krok 3: Uruchomienie aplikacji 
+Otwórz drugie okno terminala (nie zamykając pierwszego) i uruchom serwer deweloperski Angulara:
 
 ```bash
-ng e2e
+ng server
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Otwórz przeglądarkę i wejdź pod adres:
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash 
+👉 http://localhost:4200
+```

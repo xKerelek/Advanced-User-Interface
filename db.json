@@ -1,0 +1,60 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "content": "Buy groceries for the week (milk, eggs, bread)",
+      "isCompleted": false
+    },
+    {
+      "id": "2",
+      "content": "Go to the gym - Leg day D:",
+      "isCompleted": true
+    },
+    {
+      "id": "3",
+      "content": "Call mom to wish her a happy birthday",
+      "isCompleted": false
+    },
+    {
+      "id": "4",
+      "content": "Do the laundry and fold the clothes",
+      "isCompleted": true
+    },
+    {
+      "id": "5",
+      "content": "Pay the electricity and internet bills",
+      "isCompleted": false
+    },
+    {
+      "id": "6",
+      "content": "Clean the apartment and vacuum the floor",
+      "isCompleted": false
+    },
+    {
+      "id": "7",
+      "content": "Take the dog for a long walk in the park",
+      "isCompleted": true
+    },
+    {
+      "id": "8",
+      "content": "Cook dinner - chicken and rice",
+      "isCompleted": false
+    },
+    {
+      "id": "9",
+      "content": "Read at least 20 pages of the new book",
+      "isCompleted": true
+    },
+    {
+      "id": "10",
+      "content": "Pick up the package from the parcel locker",
+      "isCompleted": false
+    },
+    {
+      "id": "653b",
+      "content": "Buy and play new game",
+      "isCompleted": true
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

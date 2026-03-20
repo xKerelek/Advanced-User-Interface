@@ -1,0 +1,23 @@
+<li class="mt-5 flex flex-row gap-5 items-center w-full">
+  <input type="checkbox" class="cursor-pointer size-5"
+         [checked]="task.isCompleted"
+         (change)="onToggle()">
+
+  @if (!isEditing) {
+    <span class="flex-grow text-lg"
+          [ngClass]="{'text-emerald-500 line-through opacity-50' : task.isCompleted }">
+      {{task.content}}
+    </span>
+
+    <button (click)="startEdit()" class="bg-amber-300 px-4 py-2 rounded-2xl cursor-pointer hover:bg-amber-400 transition-colors">Edit</button>
+    <button (click)="onDelete()" class="bg-red-500 px-4 py-2 rounded-2xl text-white cursor-pointer hover:bg-red-600 transition-colors">Delete</button>
+  } @else {
+    <input type="text"
+           [(ngModel)]="editValue"
+           (keyup.enter)="saveEdit()"
+           class="border p-1 rounded-md flex-grow">
+
+    <button (click)="saveEdit()" class="bg-emerald-500 px-4 py-2 rounded-2xl text-white cursor-pointer">Save</button>
+    <button (click)="cancelEdit()" class="bg-gray-300 px-4 py-2 rounded-2xl cursor-pointer">Cancel</button>
+  }
+</li>
