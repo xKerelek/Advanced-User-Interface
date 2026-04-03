@@ -13,7 +13,7 @@ export class TodoService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiURL;
 
-  private tasksSubject = new BehaviorSubject<Todo[]>([]);
+  public tasksSubject = new BehaviorSubject<Todo[]>([]);
   tasks$ = this.tasksSubject.asObservable();
 
   private filterSubject = new BehaviorSubject<FilterType>('All');

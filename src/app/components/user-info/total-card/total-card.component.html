@@ -1,0 +1,33 @@
+<div class="flex flex-col md:flex-row justify-around gap-6 w-full max-w-4xl">
+
+  <mat-card>
+    <mat-card-content>
+      <mat-icon style="font-size: 40px; width: 40px; height: 40px;" color="primary">list_alt</mat-icon>
+      <div>
+        <p class="text-sm text-slate-500 font-medium m-0">All tasks</p>
+        <p class="text-3xl font-bold text-slate-800 m-0">{{ totalTasks() }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content >
+      <mat-icon style="font-size: 40px; width: 40px; height: 40px;" class="text-emerald-500">check_circle</mat-icon>
+      <div>
+        <p class="text-sm text-slate-500 font-medium m-0">Completed</p>
+        <p class="text-3xl font-bold text-slate-800 m-0">{{ completedTasks() }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-content>
+      <mat-icon style="font-size: 40px; width: 40px; height: 40px;" class="text-amber-500">pending_actions</mat-icon>
+      <div>
+        <p class="text-sm text-slate-500 font-medium m-0">Active</p>
+        <p class="text-3xl font-bold text-slate-800 m-0">{{ uncompletedTasks() }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>
