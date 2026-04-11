@@ -7,12 +7,19 @@
     </span>
   </div>
 
-  <app-filter-bar></app-filter-bar>
+  <app-filter-bar class="print:hidden"></app-filter-bar>
 
   <div>
-    <ul>
+    <ul class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 mt-8">
       @for (task of filteredTasks$ | async; track $index) {
-        <app-todo-item [task]="task" (delete)="onDelete($event)" (update)="onUpdate($event)"></app-todo-item>
+
+        <app-todo-item
+          class="block h-full"
+          [task]="task"
+          (delete)="onDelete($event)"
+          (update)="onUpdate($event)">
+        </app-todo-item>
+
       } @empty {
         <p class="mt-5 text-gray-600 italic">No task yet. Add one above!</p>
       }

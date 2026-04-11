@@ -54,6 +54,11 @@
       "id": "653b",
       "content": "Buy and play new game",
       "isCompleted": true
+    },
+    {
+      "id": "9540",
+      "content": "Listen my favourite music",
+      "isCompleted": true
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
