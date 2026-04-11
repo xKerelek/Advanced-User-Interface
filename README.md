@@ -5,15 +5,16 @@
 * **Pełny CRUD:** Dodawanie, odczyt, edycja **inline-editing** oraz usuwanie zadań, zsynchronizowane z lokalną bazą danych za pomocą zapytań HTTP.
 * **Nowoczesne zarządzanie stanem (Signals):** Wykorzystanie `toSignal` oraz `computed` do błyskawicznego, reaktywnego przeliczania wyświetlanej listy i liczników zadań.
 * **Czysty Control Flow:** Zastosowanie natywnej składni `@if`, `@else` i `@for` w widokach, co zapewnia przejrzystą, imperatywną strukturę logiczną.
-* **Dynamiczne filtrowanie:** Przełączanie między widokami zadań (All / Active / Completed).
+* **Dashboard (Angular Material):** Zbudowano panel profilu z dynamicznymi kartami statystyk i ustawieniami, bazując na gotowych komponentach Material UI.
+* **Responsive Design (Mobile-First):** Wdrożono płynną typografię (`clamp()`), obsługę stanu Hamburger Menu oraz responsywną siatkę zadań przy użyciu CSS Grid (`auto-fit`), bez rzeźbienia w starych media queries.
+* **Gotowość do druku (@media print):** Automatyczne ukrywanie interfejsu (nawigacja, przyciski) podczas drukowania listy do czystego PDF-a.
 * **Czysta architektura:** Rozdzielenie logiki biznesowej (Serwisy), modeli danych (Interfejsy) oraz warstwy prezentacji (Komponenty).
-* **UI/UX:** W pełni ostylowany, responsywny interfejs przy użyciu Tailwind CSS.
-
 ## 🛠️ Technologie
 
-* Angular 19 
+* Angular 19
 * TypeScript
 * Tailwind CSS
+* Angular Material
 * json-server
 
 ---
@@ -57,15 +58,16 @@ ng serve
 * **Full CRUD:** Adding, reading, **inline-editing**, and deleting tasks, synchronized with a local database via HTTP requests.
 * **Modern State Management (Signals):** Utilizing `toSignal` and `computed` for instant, reactive recalculation of the displayed list and task counters.
 * **Clean Control Flow:** Application of native `@if`, `@else`, and `@for` syntax in templates, providing a clear, imperative logical structure.
-* **Dynamic Filtering:** Switching between task views (All / Active / Completed).
+* **Dashboard (Angular Material):** Built a user profile panel with dynamic statistic cards and settings, using out-of-the-box Material UI components.
+* **Responsive Design (Mobile-First):** Implemented fluid typography (`clamp()`), state-driven Hamburger Menu, and a responsive task grid using CSS Grid (`auto-fit`) without hardcoded media queries.
+* **Print-Ready (@media print):** Automatically hides UI elements (navigation, buttons) when printing the task list to a clean PDF.
 * **Clean Architecture:** Separation of business logic (Services), data models (Interfaces), and the presentation layer (Components).
-* **UI/UX:** Fully styled, responsive interface using Tailwind CSS.
-
 ## 🛠️ Technologies
 
-* Angular 19 
+* Angular 19
 * TypeScript
 * Tailwind CSS
+* Angular Material
 * json-server
 
 ---
