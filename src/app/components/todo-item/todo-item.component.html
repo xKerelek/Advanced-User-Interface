@@ -1,10 +1,11 @@
-<div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full transition-all hover:shadow-md">
+<article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full transition-all hover:shadow-md">
   <div class="p-5 flex flex-col grow gap-4">
 
     <div class="flex items-start gap-3">
       <input type="checkbox" class="cursor-pointer size-5 mt-1"
              [checked]="task.isCompleted"
-             (change)="onToggle()">
+             (change)="onToggle()"
+             [attr.aria-label]="'Toggle task: ' + task.content">
 
       @if (!isEditing) {
         <span class="grow text-lg font-medium wrap-break-words"
@@ -15,19 +16,28 @@
         <input type="text"
                [(ngModel)]="editValue"
                (keyup.enter)="saveEdit()"
+               aria-label="Edit task content"
                class="border border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 p-2 rounded-lg grow w-full">
       }
     </div>
 
-    <div class="mt-auto flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+    <footer class="mt-auto flex flex-wrap gap-2 pt-2 border-t border-gray-100">
       @if (!isEditing) {
-        <button (click)="startEdit()" class="flex-1 bg-amber-100 text-amber-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-amber-200 transition-colors">Edit</button>
-        <button (click)="onDelete()" class="flex-1 bg-red-100 text-red-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-red-200 transition-colors">Delete</button>
+        <button (click)="startEdit()"
+                [attr.aria-label]="'Edit task: ' + task.content"
+                class="flex-1 bg-amber-100 text-amber-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-amber-200 transition-colors">Edit</button>
+        <button (click)="onDelete()"
+                [attr.aria-label]="'Delete task: ' + task.content"
+                class="flex-1 bg-red-100 text-red-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-red-200 transition-colors">Delete</button>
       } @else {
-        <button (click)="saveEdit()" class="flex-1 bg-emerald-500 text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-emerald-600 transition-colors">Save</button>
-        <button (click)="cancelEdit()" class="flex-1 bg-gray-200 text-gray-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-gray-300 transition-colors">Cancel</button>
+        <button (click)="saveEdit()"
+                aria-label="Save changes"
+                class="flex-1 bg-emerald-500 text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-emerald-600 transition-colors">Save</button>
+        <button (click)="cancelEdit()"
+                aria-label="Cancel editing"
+                class="flex-1 bg-gray-200 text-gray-700 px-3 py-2 rounded-xl text-sm font-bold hover:bg-gray-300 transition-colors">Cancel</button>
       }
-    </div>
+    </footer>
 
   </div>
-</div>
+</article>

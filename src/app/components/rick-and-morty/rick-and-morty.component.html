@@ -1,0 +1,111 @@
+<div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-125 relative">
+
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-slate-800">Catalog</h2>
+      <p class="text-slate-500">API Integration TanStack Query</p>
+    </div>
+
+    <div class="w-full sm:w-72">
+      <input type="text" [ngModel]="searchInput()" (ngModelChange)="onSearchChange($event)"
+             placeholder="Search..."
+             class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all" />
+    </div>
+  </div>
+
+  @if (query.isPending()) {
+    <div class="flex justify-center items-center h-48">
+      <div class="animate-spin size-10 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+    </div>
+  } @else if (query.isError()) {
+    <div class="bg-red-50 text-red-700 p-6 rounded-xl font-medium border border-red-200 text-center">
+      Error while getting data! Try again!
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      @for (item of query.data()?.results || []; track item.id) {
+
+        <article (click)="openModal(item.id)" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer relative">
+
+          <button
+            (click)="onToggleFavorite($event, item)"
+            class="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-sm"
+            [attr.aria-label]="favoriteService.isFavorite(item.id) ? 'Remove from favorites' : 'Add to favorites'">
+            <span class="text-xl leading-none" [ngClass]="favoriteService.isFavorite(item.id) ? 'text-red-500' : 'text-slate-300'">
+              {{ favoriteService.isFavorite(item.id) ? '♥' : '♡' }}
+            </span>
+          </button>
+
+          <div class="overflow-hidden aspect-square border-b border-slate-100">
+            <img [src]="item.image" [alt]="item.name" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+          </div>
+          <div class="p-3">
+            <h3 class="font-bold text-sm text-slate-800 line-clamp-1" [title]="item.name">{{ item.name }}</h3>
+            <p class="text-slate-500 text-xs mt-1 truncate">
+              <span [ngClass]="item.status === 'Alive' ? 'text-emerald-500' : 'text-red-500'" class="font-bold">●</span>
+              {{ item.status }}
+            </p>
+          </div>
+        </article>
+
+      } @empty {
+        <div class="col-span-full py-10 text-center text-slate-500 font-medium bg-slate-50 rounded-xl border border-slate-200">
+          No results found for "{{ debouncedSearch() }}"
+        </div>
+      }
+    </div>
+
+    <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-100">
+      <button (click)="prevPage()" [disabled]="!query.data()?.info?.prev" class="px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors disabled:opacity-50">Previous</button>
+      <span class="font-bold text-slate-700">Page {{ currentPage() }}</span>
+      <button (click)="nextPage()" [disabled]="!query.data()?.info?.next" class="px-5 py-2.5 bg-emerald-500 text-white rounded-xl font-medium hover:bg-emerald-600 transition-colors disabled:opacity-50">Next</button>
+    </div>
+  }
+</div>
+
+@if (selectedCharacterId() !== null) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" (click)="closeModal()">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col" (click)="$event.stopPropagation()">
+
+      <div class="flex justify-between items-center p-4 border-b border-slate-100">
+        <h3 class="font-bold text-lg text-slate-800">Character Details</h3>
+        <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 focus:outline-none">
+          ✕
+        </button>
+      </div>
+
+      <div class="p-6">
+        @if (detailsQuery.isPending()) {
+          <div class="flex justify-center items-center h-40">
+            <div class="animate-spin size-8 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+          </div>
+        } @else if (detailsQuery.isError()) {
+          <div class="text-red-500 text-center py-10">Failed to load details.</div>
+        } @else {
+          @if (detailsQuery.data(); as character) {
+            <div class="flex gap-6">
+              <img [src]="character.image" [alt]="character.name" class="size-32 rounded-xl object-cover shadow-sm">
+
+              <div class="flex flex-col gap-2">
+                <h4 class="text-2xl font-black text-slate-800">{{ character.name }}</h4>
+
+                <p class="text-slate-600 text-sm">
+                  <span class="font-semibold">Status:</span>
+                  <span [ngClass]="character.status === 'Alive' ? 'text-emerald-500' : 'text-red-500'" class="ml-1 font-bold">
+                    {{ character.status }}
+                  </span>
+                </p>
+
+                <p class="text-slate-600 text-sm"><span class="font-semibold">Species:</span> {{ character.species }}</p>
+                <p class="text-slate-600 text-sm"><span class="font-semibold">Gender:</span> {{ character.gender }}</p>
+                <p class="text-slate-600 text-sm"><span class="font-semibold">Origin:</span> {{ character.origin?.name }}</p>
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+    </div>
+  </div>
+}

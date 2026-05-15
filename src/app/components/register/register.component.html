@@ -1,32 +1,171 @@
-<div class="flex flex-col">
-  <span class="  text-3xl font-bold text-center">Register</span>
+<div class="max-w-lg mx-auto mt-12 bg-white rounded-xl shadow-md border border-slate-200">
 
-  <mat-form-field>
-    <mat-label>Enter your username...</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Enter your e-mail...</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Enter your password...</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Confirm your password...</mat-label>
-    <input matInput>
-  </mat-form-field>
-
-  <section class="example-section">
-    <mat-checkbox class="example-margin">Accept terms and conditions</mat-checkbox>
-  </section>
-
-  <div class="example-button-row">
-    <button mat-raised-button>Create account</button>
-    <button mat-raised-button routerLink="/">Cancel</button>
+  <div class="bg-slate-50 px-6 py-5 border-b border-slate-200 text-center rounded-t-xl">
+    <h2 #stepHeading tabindex="-1" class="text-2xl font-bold text-slate-800 focus:outline-none">
+      Registration
+    </h2>
+    <p class="text-emerald-600 font-semibold text-sm mt-1 uppercase tracking-wide" aria-current="step">
+      Step {{ currentStep() }} of 3
+    </p>
   </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-6 flex flex-col justify-between min-h-[380px]">
+
+    @if (currentStep() === 1) {
+      <div formGroupName="step1" class="flex flex-col gap-4">
+
+        <div class="flex gap-4">
+          <div class="flex flex-col gap-1 w-full">
+            <label for="firstName" class="text-sm font-medium text-slate-700">First Name</label>
+            <input id="firstName" type="text" formControlName="firstName"
+                   class="border rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                   [attr.aria-invalid]="registerForm.get('step1.firstName')?.invalid && registerForm.get('step1.firstName')?.touched ? 'true' : null"
+                   aria-describedby="fname-err">
+            @if (registerForm.get('step1.firstName')?.invalid && registerForm.get('step1.firstName')?.touched) {
+              <span id="fname-err" role="alert" class="text-red-500 text-xs">Min. 2 characters.</span>
+            }
+          </div>
+
+          <div class="flex flex-col gap-1 w-full">
+            <label for="lastName" class="text-sm font-medium text-slate-700">Last Name</label>
+            <input id="lastName" type="text" formControlName="lastName"
+                   class="border rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                   [attr.aria-invalid]="registerForm.get('step1.lastName')?.invalid && registerForm.get('step1.lastName')?.touched ? 'true' : null"
+                   aria-describedby="lname-err">
+            @if (registerForm.get('step1.lastName')?.invalid && registerForm.get('step1.lastName')?.touched) {
+              <span id="lname-err" role="alert" class="text-red-500 text-xs">Min. 2 characters.</span>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="email" class="text-sm font-medium text-slate-700">Email Address <span class="text-xs text-gray-400 font-normal"></span></label>
+          <input id="email" type="email" formControlName="email"
+                 class="border rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                 [ngClass]="{'border-red-500': registerForm.get('step1.email')?.invalid && registerForm.get('step1.email')?.touched}"
+                 [attr.aria-invalid]="registerForm.get('step1.email')?.invalid && registerForm.get('step1.email')?.touched ? 'true' : null"
+                 aria-describedby="email-err">
+          @if (registerForm.get('step1.email')?.hasError('required') && registerForm.get('step1.email')?.touched) {
+            <span id="email-err" role="alert" class="text-red-500 text-xs">Email is required.</span>
+          }
+          @if (registerForm.get('step1.email')?.hasError('serverError')) {
+            <span id="email-err" role="alert" class="text-red-500 font-bold text-xs">{{ registerForm.get('step1.email')?.getError('serverError') }}</span>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="password" class="text-sm font-medium text-slate-700">Password</label>
+          <input id="password" type="password" formControlName="password"
+                 class="border rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                 [attr.aria-invalid]="registerForm.get('step1.password')?.invalid && registerForm.get('step1.password')?.touched ? 'true' : null"
+                 aria-describedby="pwd-err pwd-hint">
+
+          <div id="pwd-hint" aria-live="polite" class="text-xs mt-1 font-semibold"
+               [ngClass]="{'text-red-500': getPasswordStrength() === 'weak', 'text-yellow-500': getPasswordStrength() === 'medium', 'text-emerald-500': getPasswordStrength() === 'strong'}">
+            Password strength: {{ getPasswordStrength() }}
+          </div>
+
+          @if (registerForm.get('step1.password')?.invalid && registerForm.get('step1.password')?.touched) {
+            <span id="pwd-err" role="alert" class="text-red-500 text-xs">Min. 8 chars, a number, and an uppercase letter.</span>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label for="confirmPassword" class="text-sm font-medium text-slate-700">Confirm Password</label>
+          <input id="confirmPassword" type="password" formControlName="confirmPassword"
+                 class="border rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                 [attr.aria-invalid]="registerForm.get('step1')?.hasError('mismatch') && registerForm.get('step1.confirmPassword')?.touched ? 'true' : null"
+                 aria-describedby="cpwd-err">
+          @if (registerForm.get('step1')?.hasError('mismatch') && registerForm.get('step1.confirmPassword')?.touched) {
+            <span id="cpwd-err" role="alert" class="text-red-500 text-xs">Passwords do not match!</span>
+          }
+        </div>
+
+      </div>
+    }
+
+    @if (currentStep() === 2) {
+      <div formGroupName="step2" class="flex flex-col gap-6">
+
+        <div formArrayName="categories">
+          <label class="text-sm font-medium text-slate-700 mb-2 block">Categories (min. 1)</label>
+
+          @for (cat of categories.controls; track $index) {
+            <div class="flex gap-2 mb-2">
+              <input [formControlName]="$index" type="text" placeholder="Enter category"
+                     class="border rounded-lg p-2 flex-grow focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                     [attr.aria-invalid]="cat.invalid && cat.touched ? 'true' : null">
+              <button type="button" (click)="removeCategory($index)" class="bg-red-100 text-red-600 px-3 rounded-lg hover:bg-red-200" [disabled]="categories.length === 1">X</button>
+            </div>
+          }
+          <button type="button" (click)="addCategory()" class="text-sm text-emerald-600 font-bold hover:underline">+ Add another</button>
+        </div>
+
+        <div formGroupName="notifications" class="flex flex-col gap-2">
+          <p class="text-sm font-medium text-slate-700">Notifications</p>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="notif-email" formControlName="email" aria-label="Email Notifications" class="w-4 h-4 accent-emerald-500 rounded">
+            <label for="notif-email" class="text-sm text-slate-700">Email</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="notif-push" formControlName="push" class="w-4 h-4 accent-emerald-500 rounded">
+            <label for="notif-push" class="text-sm text-slate-700">Push</label>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2 border-t border-slate-100">
+          <input type="checkbox" id="newsletter" formControlName="newsletter" class="w-4 h-4 accent-emerald-500 rounded">
+          <label for="newsletter" class="text-sm text-slate-700">Subscribe to newsletter (optional)</label>
+        </div>
+
+      </div>
+    }
+
+    @if (currentStep() === 3) {
+      <div formGroupName="step3" class="flex flex-col gap-6">
+
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+          <h3 class="font-semibold text-slate-800 text-sm mb-2">Your Data Summary:</h3>
+          <p class="text-sm text-slate-600 mb-1"><strong>Name:</strong> {{ registerForm.value.step1?.firstName }} {{ registerForm.value.step1?.lastName }}</p>
+          <p class="text-sm text-slate-600 mb-1"><strong>Email:</strong> {{ registerForm.value.step1?.email }}</p>
+          <p class="text-sm text-slate-600"><strong>Number of categories:</strong> {{ categories.length }}</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="terms" formControlName="acceptTerms" required aria-required="true" class="w-4 h-4 accent-emerald-500 rounded border-slate-300"
+                 [attr.aria-invalid]="registerForm.get('step3.acceptTerms')?.invalid && registerForm.get('step3.acceptTerms')?.touched ? 'true' : null">
+          <label for="terms" class="text-sm text-slate-700 cursor-pointer">I accept the GDPR privacy policy *</label>
+        </div>
+
+      </div>
+    }
+
+    <div class="flex justify-between items-center mt-8 pt-4 border-t border-slate-100">
+
+      @if (currentStep() > 1) {
+        <button type="button" (click)="prevStep()" [disabled]="isSubmitting()"
+                class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200 transition-colors disabled:opacity-50">
+          Back
+        </button>
+      } @else {
+        <div></div>
+      }
+
+      @if (currentStep() < 3) {
+        <button type="button" (click)="nextStep()"
+                class="px-5 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors">
+          Next
+        </button>
+      } @else {
+        <button type="submit"
+                [disabled]="isSubmitting() || registerForm.invalid"
+                [attr.aria-busy]="isSubmitting()"
+                class="px-5 py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors disabled:opacity-50">
+          {{ isSubmitting() ? 'Submitting...' : 'Register' }}
+        </button>
+      }
+
+    </div>
+
+  </form>
 </div>

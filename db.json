@@ -13,7 +13,7 @@
     {
       "id": "3",
       "content": "Call mom to wish her a happy birthday",
-      "isCompleted": false
+      "isCompleted": true
     },
     {
       "id": "4",
@@ -49,11 +49,6 @@
       "id": "10",
       "content": "Pick up the package from the parcel locker",
       "isCompleted": false
-    },
-    {
-      "id": "653b",
-      "content": "Buy and play new game",
-      "isCompleted": true
     },
     {
       "id": "9540",

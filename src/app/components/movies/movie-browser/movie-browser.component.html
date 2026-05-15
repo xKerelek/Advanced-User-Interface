@@ -1,0 +1,133 @@
+<div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-125 relative">
+
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+    <div>
+      <h2 class="text-3xl font-black text-slate-800">Movie Browser</h2>
+      <p class="text-slate-500">TMDB Integration & Infinite Scroll</p>
+    </div>
+
+    <div class="w-full sm:w-72">
+      <input
+        type="text"
+        [ngModel]="searchInput()"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Search for movies..."
+        class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all"
+      />
+    </div>
+  </div>
+
+  @if (query.isPending()) {
+    <div class="flex justify-center items-center h-48">
+      <div class="animate-spin size-10 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+    </div>
+  } @else if (query.isError()) {
+    <div class="bg-red-50 text-red-700 p-6 rounded-xl font-medium border border-red-200 text-center">
+      Failed to connect to API. Please verify your TMDB Key or Requestly rules.
+    </div>
+  } @else {
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      @for (page of query.data()?.pages; track $index) {
+        @for (movie of page.results; track movie.id) {
+
+          <article (click)="openModal(movie.id)"
+                   class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer relative">
+
+            <button (click)="onToggleFavorite($event, movie)"
+                    class="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors shadow-sm focus:outline-none">
+              <span class="text-xl leading-none"
+                    [class.text-red-500]="favoriteService.isFavorite(movie.id)"
+                    [class.text-slate-300]="!favoriteService.isFavorite(movie.id)">
+                {{ favoriteService.isFavorite(movie.id) ? '♥' : '♡' }}
+              </span>
+            </button>
+
+            <div class="overflow-hidden aspect-[2/3] bg-slate-100">
+              @if (movie.poster_path) {
+                <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                     [alt]="movie.title"
+                     class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+              } @else {
+                <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs">No Poster</div>
+              }
+            </div>
+
+            <div class="p-3">
+              <h3 class="font-bold text-sm text-slate-800 line-clamp-1" [title]="movie.title">{{ movie.title }}</h3>
+              <p class="text-slate-500 text-xs mt-1 flex items-center gap-1">
+                <span class="text-amber-500 text-sm">★</span> {{ movie.vote_average.toFixed(1) }}
+              </p>
+            </div>
+
+          </article>
+        }
+      } @empty {
+        <div class="col-span-full py-10 text-center text-slate-500 font-medium bg-slate-50 rounded-xl border border-slate-200">
+          No results found for "{{ debouncedSearch() }}"
+        </div>
+      }
+    </div>
+
+    <div #loadMoreTrigger class="w-full h-24 flex justify-center items-center mt-8">
+      @if (query.isFetchingNextPage()) {
+        <div class="flex flex-col items-center gap-2">
+          <div class="animate-spin size-8 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+          <span class="text-xs text-slate-400 animate-pulse">Loading more movies...</span>
+        </div>
+      } @else if (query.hasNextPage()) {
+        <span class="text-slate-400 text-sm italic">Scroll down to discover more</span>
+      } @else if (query.data() && query.data()!.pages.length > 0) {
+        <span class="text-slate-400 text-sm font-medium">You've reached the end of the catalog 🍿</span>
+      }
+    </div>
+  }
+</div>
+
+@if (selectedMovieId() !== null) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" (click)="closeModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200" (click)="$event.stopPropagation()">
+
+      <div class="flex justify-between items-center p-4 border-b border-slate-100">
+        <h3 class="font-bold text-lg text-slate-800">Movie Details</h3>
+        <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 transition-colors">✕</button>
+      </div>
+
+      <div class="p-6">
+        @if (detailsQuery.isPending()) {
+          <div class="flex justify-center items-center h-40">
+            <div class="animate-spin size-8 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+          </div>
+        } @else if (detailsQuery.isError()) {
+          <div class="text-red-500 text-center py-10 font-medium">Error loading details. Please try again.</div>
+        } @else {
+          @if (detailsQuery.data(); as movie) {
+            <div class="flex flex-col sm:flex-row gap-6">
+              <div class="flex-shrink-0">
+                @if (movie.poster_path) {
+                  <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                       [alt]="movie.title"
+                       class="w-48 rounded-xl object-cover shadow-md mx-auto sm:mx-0">
+                }
+              </div>
+
+              <div class="flex flex-col gap-3">
+                <h4 class="text-2xl font-black text-slate-800">{{ movie.title }}</h4>
+                <div class="flex flex-wrap items-center gap-4 text-sm font-semibold text-slate-700">
+                  <span class="flex items-center gap-1">
+                    <span class="text-amber-500 text-lg">★</span> {{ movie.vote_average.toFixed(1) }}
+                  </span>
+                  <span class="text-slate-400">|</span>
+                  <span>{{ movie.release_date }}</span>
+                  <span class="text-slate-400">|</span>
+                  <span class="px-2 py-0.5 bg-slate-100 rounded text-xs uppercase">{{ movie.status }}</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed mt-2">{{ movie.overview }}</p>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+}
