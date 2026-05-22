@@ -11,12 +11,25 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TmdbService, Movie } from '../../../core/services/tmdb.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
 @Component({
   selector: 'app-movie-browser',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './movie-browser.component.html'
+  templateUrl: './movie-browser.component.html',
+  animations: [
+    trigger('listAnimation', [
+      transition('* <=> *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger('80ms', [
+            animate('250ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class MovieBrowserComponent implements OnDestroy {
   private tmdbService = inject(TmdbService);
