@@ -1,8 +1,10 @@
 <a href="#main-content" class="absolute -translate-y-[150%] focus:translate-y-0 left-4 top-4 bg-emerald-500 text-white px-4 py-2 font-bold rounded-lg z-50 transition-transform duration-300">
-Skip to main content</a>
+  Skip to main content</a>
 
 <app-header class="print:hidden"></app-header>
 
-<main id="main-content" class="container mx-auto min-h-screen mt-10" tabindex="-1">
-  <router-outlet></router-outlet>
+<main id="main-content" class="container mx-auto min-h-screen mt-10" tabindex="-1" [@routeAnimations]="prepareRoute(outlet)">
+
+  <router-outlet #outlet="outlet"></router-outlet>
+
 </main>
