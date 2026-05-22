@@ -12,6 +12,7 @@
         [ngModel]="searchInput()"
         (ngModelChange)="onSearchChange($event)"
         placeholder="Search for movies..."
+        aria-label="Search for movies by title"
         class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all"
       />
     </div>
@@ -32,9 +33,15 @@
         @for (movie of page.results; track movie.id) {
 
           <article (click)="openModal(movie.id)"
-                   class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer relative">
+                   (keydown.enter)="openModal(movie.id)"
+                   (keydown.space)="openModal(movie.id); $event.preventDefault()"
+                   tabindex="0"
+                   role="button"
+                   [attr.aria-label]="'View details for ' + movie.title"
+                   class="movie-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer relative focus:outline-none focus:ring-4 focus:ring-emerald-500 focus:border-emerald-500">
 
             <button (click)="onToggleFavorite($event, movie)"
+                    [attr.aria-label]="favoriteService.isFavorite(movie.id) ? 'Remove ' + movie.title + ' from favorites' : 'Add ' + movie.title + ' to favorites'"
                     class="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors shadow-sm focus:outline-none">
               <span class="text-xl leading-none"
                     [class.text-red-500]="favoriteService.isFavorite(movie.id)"
@@ -90,7 +97,7 @@
 
       <div class="flex justify-between items-center p-4 border-b border-slate-100">
         <h3 class="font-bold text-lg text-slate-800">Movie Details</h3>
-        <button (click)="closeModal()" class="text-slate-400 hover:text-slate-700 transition-colors">✕</button>
+        <button (click)="closeModal()" aria-label="Close movie details" class="text-slate-400 hover:text-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded-md">✕</button>
       </div>
 
       <div class="p-6">

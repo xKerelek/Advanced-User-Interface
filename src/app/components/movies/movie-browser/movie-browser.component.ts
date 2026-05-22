@@ -22,19 +22,15 @@ export class MovieBrowserComponent implements OnDestroy {
   private tmdbService = inject(TmdbService);
   favoriteService = inject(FavoriteService);
 
-  // Search signals
   searchInput = signal('');
   debouncedSearch = signal('');
   private debounceTimer: any;
 
-  // 1. Infinite Query for movies (Bonus requirement)
   query = this.tmdbService.getInfiniteMovies(this.debouncedSearch);
 
-  // 2. Modal & Lazy Fetching logic
   selectedMovieId = signal<number | null>(null);
   detailsQuery = this.tmdbService.getMovieDetails(this.selectedMovieId);
 
-  // 3. IntersectionObserver for Infinite Scroll
   @ViewChild('loadMoreTrigger') loadMoreTrigger!: ElementRef;
   private observer: IntersectionObserver | null = null;
 
