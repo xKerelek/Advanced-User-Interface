@@ -3,14 +3,26 @@ import { RickAndMortyService, Character } from '../../core/services/rick-and-mor
 import { FavoriteService } from '../../core/services/favorite.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
 @Component({
   selector: 'app-rick-and-morty',
   imports: [CommonModule, FormsModule],
   templateUrl: './rick-and-morty.component.html',
-  styleUrl: './rick-and-morty.component.css'
+  styleUrl: './rick-and-morty.component.css',
+  animations: [
+    trigger('listAnimation', [
+      transition('* <=> *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger('80ms', [
+            animate('250ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
-
 export class RickAndMortyComponent {
   private movieService = inject(RickAndMortyService);
   favoriteService = inject(FavoriteService);
@@ -55,4 +67,3 @@ export class RickAndMortyComponent {
     if (this.query.data()?.info?.prev) this.currentPage.update(p => Math.max(1, p - 1));
   }
 }
-
