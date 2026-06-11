@@ -1,6 +1,7 @@
-import { Component, signal, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, signal, inject, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormArray } from '@angular/forms';
+import Plausible from 'plausible-tracker';
 
 @Component({
   selector: 'app-register',
@@ -8,7 +9,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormArray } from '@angula
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   private fb = inject(FormBuilder);
 
   @ViewChild('stepHeading') stepHeading!: ElementRef<HTMLHeadingElement>;
@@ -22,6 +23,13 @@ export class RegisterComponent {
     if (pwd.length < 8) return 'weak';
     if (/[A-Z]/.test(pwd) && /[0-9]/.test(pwd)) return 'strong';
     return 'medium';
+  }
+
+  ngOnDestroy() {
+    if (this.registerForm.dirty && !this.isSubmitting()) {
+      const plausible = Plausible({ domain: 'localhost', trackLocalhost: true });
+      plausible.trackEvent('form_abandon', { props: { step: this.currentStep() } });
+    }
   }
 
   registerForm = this.fb.group({
@@ -96,6 +104,8 @@ export class RegisterComponent {
           this.registerForm.get('step1.email')?.setErrors({ serverError: 'This email is already registered' });
         } else {
           console.log('Success! Data:', this.registerForm.value);
+          const plausible = Plausible({ domain: 'localhost', trackLocalhost: true });
+          plausible.trackEvent('form_submit');
         }
         this.isSubmitting.set(false);
       }, 1500);

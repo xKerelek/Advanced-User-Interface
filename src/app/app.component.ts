@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HeaderComponent} from './components/header/header.component';
 import {RouterOutlet} from '@angular/router';
+import Plausible from 'plausible-tracker';
 import { trigger, transition, style, animate, query } from '@angular/animations';
 
 @Component({
@@ -26,6 +27,15 @@ import { trigger, transition, style, animate, query } from '@angular/animations'
 })
 export class AppComponent {
   title = 'todo-list';
+
+  constructor() {
+    const plausible = Plausible({
+      domain: 'localhost',
+      trackLocalhost: true,
+    });
+    plausible.enableAutoPageviews();
+  }
+
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
