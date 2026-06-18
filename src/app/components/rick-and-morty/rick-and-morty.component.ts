@@ -23,6 +23,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
     ])
   ]
 })
+
 export class RickAndMortyComponent {
   private movieService = inject(RickAndMortyService);
   favoriteService = inject(FavoriteService);
@@ -31,6 +32,7 @@ export class RickAndMortyComponent {
   searchInput = signal('');
   debouncedSearch = signal('');
   private debounceTimer: any;
+  skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   query = this.movieService.getCharacters(this.currentPage, this.debouncedSearch);
 

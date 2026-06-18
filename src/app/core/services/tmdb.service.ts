@@ -4,22 +4,7 @@ import { injectQuery } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { injectInfiniteQuery } from '@tanstack/angular-query-experimental';
-
-export interface Movie {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string | null;
-  release_date: string;
-  vote_average: number;
-}
-
-export interface MoviesResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
+import {MoviesResponse} from '../../shared/models/movie.interface';
 
 @Injectable({ providedIn: 'root' })
 export class TmdbService {

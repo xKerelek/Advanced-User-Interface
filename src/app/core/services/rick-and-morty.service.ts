@@ -2,27 +2,8 @@ import { inject, Injectable, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
+import {Character, RamResponse} from '../../shared/models/ram.interface';
 
-export interface Character {
-  id: number;
-  name: string;
-  status: string;
-  species: string;
-  image: string;
-  gender?: string;
-  origin?: { name: string };
-  location?: { name: string };
-}
-
-export interface RamResponse {
-  info: {
-    count: number;
-    pages: number;
-    next: string | null;
-    prev: string | null;
-  };
-  results: Character[];
-}
 
 @Injectable({ providedIn: 'root' })
 export class RickAndMortyService {

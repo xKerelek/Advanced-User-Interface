@@ -7,7 +7,7 @@ import {
   afterNextRender,
   OnDestroy
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TmdbService, Movie } from '../../../core/services/tmdb.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
@@ -16,7 +16,7 @@ import { trigger, transition, style, animate, query, stagger } from '@angular/an
 @Component({
   selector: 'app-movie-browser',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgOptimizedImage],
   templateUrl: './movie-browser.component.html',
   animations: [
     trigger('listAnimation', [
@@ -38,6 +38,7 @@ export class MovieBrowserComponent implements OnDestroy {
   searchInput = signal('');
   debouncedSearch = signal('');
   private debounceTimer: any;
+  skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   query = this.tmdbService.getInfiniteMovies(this.debouncedSearch);
 

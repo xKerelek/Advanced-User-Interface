@@ -29,6 +29,9 @@ export class AppComponent {
   title = 'todo-list';
 
   constructor() {
+    // RODO: Używamy Plausible (privacy-first). Zbieramy wyłącznie anonimowe zdarzenia
+    // (pageviews, kliknięcia) bez użycia ciasteczek (cookies) i bez fingerprintingu.
+    // Dane są niezbędne wyłącznie do optymalizacji ścieżek UX (minimalizacja danych).
     const plausible = Plausible({
       domain: 'localhost',
       trackLocalhost: true,

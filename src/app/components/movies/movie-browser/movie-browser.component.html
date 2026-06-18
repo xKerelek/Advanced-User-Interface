@@ -19,8 +19,16 @@
   </div>
 
   @if (query.isPending()) {
-    <div class="flex justify-center items-center h-48">
-      <div class="animate-spin size-10 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      @for (i of skeletonArray; track $index) {
+        <article class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col relative">
+          <div class="skeleton aspect-2/3 bg-slate-100 relative"></div>
+          <div class="p-3 flex flex-col gap-2">
+            <div class="skeleton h-4 w-3/4 rounded"></div>
+            <div class="skeleton h-3 w-1/3 rounded"></div>
+          </div>
+        </article>
+      }
     </div>
   } @else if (query.isError()) {
     <div class="bg-red-50 text-red-700 p-6 rounded-xl font-medium border border-red-200 text-center">
@@ -28,8 +36,8 @@
     </div>
   } @else {
 
-    <div [@listAnimation]="query.data()?.pages?.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-      @for (page of query.data()?.pages; track $index) {
+    <div [@listAnimation]="query.data().pages.length" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+      @for (page of query.data().pages; track $index) {
         @for (movie of page.results; track movie.id) {
 
           <article (click)="openModal(movie.id)"
@@ -50,10 +58,11 @@
               </span>
             </button>
 
-            <div class="overflow-hidden aspect-[2/3] bg-slate-100">
+            <div class="overflow-hidden aspect-2/3 bg-slate-100 relative">
               @if (movie.poster_path) {
-                <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                <img [ngSrc]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
                      [alt]="movie.title"
+                     width="500" height="750"
                      class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
               } @else {
                 <div class="w-full h-full flex items-center justify-center text-slate-400 text-xs">No Poster</div>
@@ -101,31 +110,21 @@
       </div>
 
       <div class="p-6">
-        @if (query.isPending()) {
-          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-            @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track $index) {
-              <article class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col aspect-[2/3] relative">
-
-                <div class="skeleton absolute inset-0"></div>
-
-                <div class="absolute bottom-0 left-0 right-0 p-3 bg-white flex flex-col gap-2 z-10">
-                  <div class="skeleton h-4 w-3/4 rounded"></div>
-                  <div class="skeleton h-3 w-1/3 rounded"></div>
-                </div>
-
-              </article>
-            }
+        @if (detailsQuery.isPending()) {
+          <div class="flex justify-center items-center h-40">
+            <div class="animate-spin size-8 border-4 border-slate-200 border-t-emerald-500 rounded-full"></div>
           </div>
-        } @else if (query.isError()) {
+        } @else if (detailsQuery.isError()) {
           <div class="text-red-500 text-center py-10 font-medium">Error loading details. Please try again.</div>
         } @else {
           @if (detailsQuery.data(); as movie) {
             <div class="flex flex-col sm:flex-row gap-6">
-              <div class="flex-shrink-0">
+              <div class="shrink-0">
                 @if (movie.poster_path) {
-                  <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                  <img [ngSrc]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
                        [alt]="movie.title"
-                       class="w-48 rounded-xl object-cover shadow-md mx-auto sm:mx-0">
+                       width="500" height="750"
+                       class="w-48 h-auto rounded-xl object-cover shadow-md mx-auto sm:mx-0">
                 }
               </div>
 

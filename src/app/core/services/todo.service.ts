@@ -35,9 +35,14 @@ export class TodoService {
   }
 
   addTask(content: string) {
-    this.http.post<Todo>(this.apiUrl, { content, isCompleted: false }).subscribe({
+    const currentTasks = this.tasksSubject.value;
+    const maxId = currentTasks.length > 0 
+      ? Math.max(...currentTasks.map(t => Number(t.id) || 0)) 
+      : 0;
+    const nextId = (maxId + 1).toString();
+
+    this.http.post<Todo>(this.apiUrl, { id: nextId, content, isCompleted: false }).subscribe({
       next: (newTask) => {
-        const currentTasks = this.tasksSubject.value;
         this.tasksSubject.next([...currentTasks, newTask])
       },
       error: (error) => {
