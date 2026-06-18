@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { RickAndMortyService, Character } from '../../core/services/rick-and-morty.service';
+import { RickAndMortyService } from '../../core/services/rick-and-morty.service';
 import { FavoriteService } from '../../core/services/favorite.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import {Character} from '../../shared/models/ram.interface';
 
 @Component({
   selector: 'app-rick-and-morty',

@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TmdbService, Movie } from '../../../core/services/tmdb.service';
+import { TmdbService} from '../../../core/services/tmdb.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import {Movie} from '../../../shared/models/movie.interface';
 
 @Component({
   selector: 'app-movie-browser',
